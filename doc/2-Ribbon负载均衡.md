@@ -11,7 +11,7 @@ Ribbon是一个负载均衡客户端，可以很好的控制htt和tcp的一些�
 
 ## 准备
 
-基于[eureka](1-Eureka服务注册发现.md)中示例的两个示例：启动eureka-src（8761）作为注册中心；启动eureka-cli-1（端口8762）作为客户端，然后再修改eureka-cli-1的配置文件端口改为8763新启一个服务；
+基于[eureka](1-Eureka服务注册发现.md)中示例的两个示例：启动eureka-srv（8761）作为注册中心；启动eureka-cli-1（端口8762）作为客户端，然后再修改eureka-cli-1的配置文件端口改为8763新启一个服务；
 
 再访问 ```localhost:8761```，可以看到eureka-srv-cli1在eureka server中注册了两个实例：
 
@@ -138,4 +138,9 @@ public class HelloController {
 
 ![](pictures/ribbon/3.png)
 
+
+- 一个服务注册中心 eureka-srv，端口 8761
+- eureka-srv-cli1 服务跑了两个实例，端口分别为 8762、8763，分别向注册中心注册
+- service-ribbon 端口为8764，向注册中心注册
+- 当service-ribbon通过 restTemplate调用 eureka-srv-cli1 的 /hi 服务时，使用了 ribbon 负载均衡，会轮流调用 8762、8763 两个实例。
 
