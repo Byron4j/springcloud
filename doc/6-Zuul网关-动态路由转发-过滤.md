@@ -21,8 +21,92 @@ Zuul 功能：
 - 压力测试
 - [金丝雀测试-灰度测试](https://www.cnblogs.com/apanly/p/8784096.html)
 - 动态路由
-- 
+- 服务迁移
+- 卸载
+- 安全机制
+- 静态响应处理
+- 主动交互管理
 
+
+## 准备
+
+### 创建工程
+
+创建一个 service-zuul 工程。
+
+引入依赖：
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+</dependency>
+```
+
+### 在启动累使用 ```@EnableZuulProxy``` 注解，开启 zuul 功能
+
+```java
+@EnableZuulProxy
+@EnableEurekaClient
+@SpringBootApplication
+public class ServiceZuulApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ServiceZuulApplication.class, args);
+	}
+
+}
+
+```
+
+### 修改配置
+
+修改application.properties文件；
+
+```properties
+
+
+spring.application.name=service-zuul
+#  本实例端口
+server.port=8767
+
+# eureka 注册中心
+registry.port=8761
+eureka.instance.hostname=localhost
+eureka.client.serviceUrl.defaultZone=http://${eureka.instance.hostname}:${registry.port}/eureka/
+
+# 添加zuul路由配置
+
+# 将 api-a 的请求都转发给 service-ribbon
+zuul.routes.api-a.path=/api-a/**
+zuul.routes.api-a.serviceId=service-ribbon
+
+
+# 将 api-a 的请求都转发给 service-fign
+zuul.routes.api-b.path=/api-b/**
+zuul.routes.api-b.serviceId=service-feign
+
+```
+
+会将 localhost:8768/api-a/ 的所有请求都转发给 service-ribbon；
+
+会将 localhost:8768/api-a/ 的所有请求都转发给 service-feign；
+
+### 测试
+
+启动服务注册中心： eureka-srv、eureka-srv-cli1 的两个实例、service-ribbon、service-feign 实例。
+
+在浏览器访问： localhost:8767/api-a/hi?name=zyy , 看到：
+
+>
 
 #### 参考资料
 
