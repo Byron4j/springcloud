@@ -8,4 +8,5 @@
 - [5-HystrixDashboard仪表盘](doc/5-HystrixDashboard仪表盘.md)
 - [6-Zuul动态路由转发-过滤](doc/6-Zuul动态路由转发-过滤.md)
 - [7-SpringCloud-Config配置](doc/7-SpringCloud-Config配置.md)
+- [8-SpringCloud-Config高可用架构](doc/8-SpringCloud-Config高可用架构.md)
 - [999-附加参考资料](doc/999-附加参考资料.md)
